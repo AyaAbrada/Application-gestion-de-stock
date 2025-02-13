@@ -1,4 +1,4 @@
-package net.javaguides.usermanagement.dao;
+package MANAGSTOCK.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.javaguides.usermanagement.model.User;
+import MANAGSTOCK.model.Produit;
 
 /**
  * AbstractDAO.java This DAO class provides CRUD database operations for the
@@ -18,17 +18,16 @@ import net.javaguides.usermanagement.model.User;
  *
  */
 public class ProduitDAO {
-	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/GestionStock";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 
-	private static final String INSERT_USERS_SQL = "INSERT INTO users"
+	private static final String SELECT_PRODUIT_BY_ID = "select id,nom,description,quantite,prix,categorie from stock where id =?";
+	private static final String SELECT_ALL_PRODUITS = "select * from stock";
+	private static final String INSERT_PRODUITS_SQL = "INSERT INTO stock"
 			+ "  (nom, description, quantite, prix, categorie) VALUES " + " (?, ?, ?, ?, ?);";
-
-	private static final String SELECT_PRODUIT_BY_ID = "select id,nom,description,quantite,prix,categorie from users where id =?";
-	private static final String SELECT_ALL_PRODUITS = "select * from produits";
-	private static final String DELETE_PRODUIT_SQL = "delete from produits where id = ?;";
-	private static final String UPDATE_PRODUIT_SQL = "update users set nom = ?,description= ?, quantite =?, prix =?, categorie =? where id = ?;";
+	private static final String UPDATE_PRODUITS_SQL =  "update stock set nom = ?,description= ?, quantite =?, prix =?, categorie =? where id = ?;";
+	private static final String DELETE_PRODUITS_SQL = "delete from stock where id = ?;";
 
 	public ProduitDAO() {
 	}
@@ -49,10 +48,10 @@ public class ProduitDAO {
 	}
 
 	public void insertUser(Produit produit) throws SQLException {
-		System.out.println(INSERT_USERS_SQL);
+		System.out.println(INSERT_PRODUITS_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PRODUITS_SQL)) {
 			preparedStatement.setString(1, produit.getNom());
 			preparedStatement.setString(2, produit.getDescription());
 			preparedStatement.setInt(3, produit.getQuantite());
@@ -70,7 +69,7 @@ public class ProduitDAO {
 		// Step 1: Establishing a Connection
 		try (Connection connection = getConnection();
 				// Step 2:Create a statement using connection object
-				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID);) {
+				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PRODUIT_BY_ID);) {
 			preparedStatement.setInt(1, id);
 			System.out.println(preparedStatement);
 			// Step 3: Execute the query or update query
@@ -99,7 +98,7 @@ public class ProduitDAO {
 		try (Connection connection = getConnection();
 
 				// Step 2:Create a statement using connection object
-				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);) {
+				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_PRODUITS);) {
 			System.out.println(preparedStatement);
 			// Step 3: Execute the query or update query
 			ResultSet rs = preparedStatement.executeQuery();
@@ -123,22 +122,22 @@ public class ProduitDAO {
 	public boolean deleteProduit(int id) throws SQLException {
 		boolean rowDeleted;
 		try (Connection connection = getConnection();
-				PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);) {
+				PreparedStatement statement = connection.prepareStatement(DELETE_PRODUITS_SQL);) {
 			statement.setInt(1, id);
 			rowDeleted = statement.executeUpdate() > 0;
 		}
 		return rowDeleted;
 	}
 
-	public boolean updateUser(Produit produit) throws SQLException {
+	public boolean updateProduit(Produit produit) throws SQLException {
 		boolean rowUpdated;
 		try (Connection connection = getConnection();
-				PreparedStatement statement = connection.prepareStatement(UPDATE_USERS_SQL);) {
+				PreparedStatement statement = connection.prepareStatement(UPDATE_PRODUITS_SQL);) {
 			statement.setString(1, produit.getNom());
 			statement.setString(2, produit.getDescription());
 			statement.setInt(3, produit.getId());
 			statement.setInt(4, produit.getQuantite());
-			statement.setFloat(5, produit.getPrix());
+			statement.setFloat(5, (float) produit.getPrix());
 			statement.setString(6, produit.getCategorie());
 
 			rowUpdated = statement.executeUpdate() > 0;
