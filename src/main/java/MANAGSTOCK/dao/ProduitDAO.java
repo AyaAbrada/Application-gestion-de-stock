@@ -47,7 +47,7 @@ public class ProduitDAO {
 		return connection;
 	}
 
-	public void insertUser(Produit produit) throws SQLException {
+	public void insertProduit(Produit produit) throws SQLException {
 		System.out.println(INSERT_PRODUITS_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
@@ -64,7 +64,7 @@ public class ProduitDAO {
 		}
 	}
 
-	public Produit selectUser(int id) {
+	public Produit selectProduit(int id) {
 		Produit produit = null;
 		// Step 1: Establishing a Connection
 		try (Connection connection = getConnection();
@@ -90,7 +90,7 @@ public class ProduitDAO {
 		return produit;
 	}
 
-	public List<Produit> selectAllUsers() {
+	public List<Produit> selectAllProduits() {
 
 		// using try-with-resources to avoid closing resources (boiler plate code)
 		List<Produit> produits = new ArrayList<>();
