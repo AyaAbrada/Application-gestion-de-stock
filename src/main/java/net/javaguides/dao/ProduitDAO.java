@@ -1,4 +1,4 @@
-package MANAGSTOCK.dao;
+package net.javaguides.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import MANAGSTOCK.model.Produit;
 
 /**
  * AbstractDAO.java This DAO class provides CRUD database operations for the
@@ -117,32 +116,6 @@ public class ProduitDAO {
 			printSQLException(e);
 		}
 		return produits;
-	}
-
-	public boolean deleteProduit(int id) throws SQLException {
-		boolean rowDeleted;
-		try (Connection connection = getConnection();
-				PreparedStatement statement = connection.prepareStatement(DELETE_PRODUITS_SQL);) {
-			statement.setInt(1, id);
-			rowDeleted = statement.executeUpdate() > 0;
-		}
-		return rowDeleted;
-	}
-
-	public boolean updateProduit(Produit produit) throws SQLException {
-		boolean rowUpdated;
-		try (Connection connection = getConnection();
-				PreparedStatement statement = connection.prepareStatement(UPDATE_PRODUITS_SQL);) {
-			statement.setString(1, produit.getNom());
-			statement.setString(2, produit.getDescription());
-			statement.setInt(3, produit.getId());
-			statement.setInt(4, produit.getQuantite());
-			statement.setFloat(5, (float) produit.getPrix());
-			statement.setString(6, produit.getCategorie());
-
-			rowUpdated = statement.executeUpdate() > 0;
-		}
-		return rowUpdated;
 	}
 
 	private void printSQLException(SQLException ex) {
